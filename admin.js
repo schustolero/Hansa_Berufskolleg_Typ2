@@ -946,7 +946,8 @@ async function loadShopConfigs(){
     snap.forEach(doc=>{ const seed=shopConfigs.get(doc.id)||{}; shopConfigs.set(doc.id,{...deepClone(seed),...deepClone(doc.data()),customerId:doc.id}); });
   }catch(err){ console.error(err); setShopState("Shopdaten konnten nicht vollständig geladen werden.","error"); }
   renderShopList();
-  if(!selectedShopId && shopConfigs.has("tg-solingen")) selectShop("tg-solingen");
+  const preferredShop = String(CENTRAL.defaultShop || "").trim();
+  if(!selectedShopId && preferredShop && shopConfigs.has(preferredShop)) selectShop(preferredShop);
   else if(!selectedShopId && shopConfigs.size) selectShop(shopConfigs.keys().next().value);
 }
 
