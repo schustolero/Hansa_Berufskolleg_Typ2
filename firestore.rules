@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "shirtzentrale@gmail.com";
+    }
+
+    match /orders/{orderId} {
+      allow create: if request.resource.data.customerId is string
+                    && request.resource.data.customerId.size() > 0
+                    && request.resource.data.orderNumber == orderId;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Shopkonfigurationen sind öffentlich lesbar, damit die Shops ohne Login laden.
+    // Nur der zentrale Admin darf sie erstellen oder ändern.
+    match /shops/{shopId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "template": "Textilshop 2 – Standard",
+  "version": "1.0",
+  "based_on": "Admin MASTER v29.7.5",
+  "reference_shop": "TG Solingen",
+  "purpose": "Vorlagen-Shop 2: Standardshop mit mehreren Produkten, Farben und Motiven",
+  "defaults": {
+    "customer_upload": false,
+    "custom_text": false,
+    "multiple_products": true,
+    "multiple_shirt_colors": true,
+    "multiple_motifs": true,
+    "multiple_print_colors": true,
+    "back_design": true
+  },
+  "instance": "Hansa Berufskolleg",
+  "shop_type": "Typ 2 – Standard",
+  "test": true,
+  "note": "Originale Hansa Motivdateien eingebaut."
+}
