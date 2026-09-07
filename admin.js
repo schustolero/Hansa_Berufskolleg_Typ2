@@ -940,7 +940,7 @@ function bindPositionEditor(){
     let x = ((ev.clientX - r.left) / r.width) * 100;
     let y = ((ev.clientY - r.top) / r.height) * 100;
     x = Math.max(8, Math.min(92, x));
-    y = Math.max(-35, Math.min(90, y));
+    y = Math.max(-80, Math.min(100, y));
     writePositionValues(x, y, NaN);
     ev.preventDefault();
   };
@@ -1137,8 +1137,8 @@ function buildShopConfig(){
   const rp=(product,side)=>{
     const d=RESPONSIVE_PRINT_DEFAULTS[product][side], mobile=responsiveValues(product,side,"mobile"), desktop=responsiveValues(product,side,"desktop");
     return {
-      xPct:clamp(mobile.xPct,10,90,d.xPct), yPct:clamp(mobile.yPct,-35,90,d.yPct), widthPct:clamp(mobile.widthPct,8,80,d.widthPct),
-      desktopXPct:clamp(desktop.xPct,10,90,mobile.xPct), desktopYPct:clamp(desktop.yPct,-35,90,mobile.yPct), desktopWidthPct:clamp(desktop.widthPct,8,80,mobile.widthPct)
+      xPct:clamp(mobile.xPct,10,90,d.xPct), yPct:clamp(mobile.yPct,-80,100,d.yPct), widthPct:clamp(mobile.widthPct,8,80,d.widthPct),
+      desktopXPct:clamp(desktop.xPct,10,90,mobile.xPct), desktopYPct:clamp(desktop.yPct,-80,100,mobile.yPct), desktopWidthPct:clamp(desktop.widthPct,8,80,mobile.widthPct)
     };
   };
   cfg.productPrint={
