@@ -356,7 +356,7 @@ function getUnifiedPrintLayout(view, cfg) {
     const w = desktop ? (product.desktopWidthPct ?? product.widthPct) : product.widthPct;
     return {
       xPct: Math.max(8, Math.min(92, Number(x) || 50)),
-      yPct: Math.max(10, Math.min(70, Number(y) || (view === "front" ? 20 : 36))),
+      yPct: Math.max(-35, Math.min(90, Number.isFinite(Number(y)) ? Number(y) : (view === "front" ? 20 : 36))),
       widthPct: Math.max(8, Math.min(80, Number(w) || (view === "front" ? 22 : 50)))
     };
   }
