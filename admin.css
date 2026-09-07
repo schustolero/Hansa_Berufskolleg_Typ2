@@ -2391,3 +2391,8 @@ body.v284-admin #ordersTab .order-card{padding:16px!important}
     justify-self:stretch!important;
   }
 }
+
+/* v29.9.0 – direkter Höhenregler für die Motivposition */
+.position-height-control{min-width:170px!important}
+.position-height-control input[type="range"]{width:100%;accent-color:#f2c100}
+.height-scale{display:flex;justify-content:space-between;font-size:10px;color:#7a8491;margin-top:2px}

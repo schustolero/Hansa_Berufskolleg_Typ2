@@ -721,6 +721,7 @@ const positionYValue = document.getElementById("positionYValue");
 const positionWValue = document.getElementById("positionWValue");
 const savePositionBtn = document.getElementById("savePositionBtn");
 const positionDevice = document.getElementById("positionDevice");
+const positionYSlider = document.getElementById("positionYSlider");
 const designerFeatureTools = document.getElementById("designerFeatureTools");
 
 let shopConfigs = new Map();
@@ -892,6 +893,7 @@ function refreshPositionEditor(){
   positionMotif.style.top = `${y}%`;
   positionMotif.style.width = `${w}%`;
   if(positionSize) positionSize.value = String(w);
+  if(positionYSlider) positionYSlider.value = String(Math.max(-35, Math.min(90, y)));
   if(positionSizeValue) positionSizeValue.textContent = friendlySizeLabel(w);
   if(positionXValue) positionXValue.textContent = "";
   if(positionYValue) positionYValue.textContent = "";
@@ -914,6 +916,7 @@ function writePositionValues(x, y, w){
     positionMotif.style.width = `${v.widthPct}%`;
   }
   if(positionSize && Number.isFinite(w)) positionSize.value = String(v.widthPct);
+  if(positionYSlider) positionYSlider.value = String(Math.max(-35, Math.min(90, Number(v.yPct) || 0)));
   if(positionSizeValue) positionSizeValue.textContent = friendlySizeLabel(v.widthPct);
   if(positionWValue) positionWValue.textContent = friendlySizeLabel(v.widthPct);
   setShopState(`Position ${positionDeviceKey()==="mobile"?"Mobil":"Desktop"} geändert – oben Speichern klicken.`);
@@ -924,6 +927,7 @@ function bindPositionEditor(){
   [positionProduct, positionSide, positionDevice].forEach(el => el?.addEventListener("change", refreshPositionEditor));
   shopFields.fixedShirtHex?.addEventListener("input", refreshPositionEditor);
   positionSize?.addEventListener("input", () => writePositionValues(NaN, NaN, Number(positionSize.value)));
+  positionYSlider?.addEventListener("input", () => writePositionValues(NaN, Number(positionYSlider.value), NaN));
   [shopFields.fixedFrontMotif, shopFields.fixedBackMotif].forEach(el => el?.addEventListener("change", refreshPositionEditor));
   Object.values(shopFields).forEach(el => {
     if(el && /^(tshirt|polo|hoodie)(Front|Back)(X|Y|W)$/.test(Object.keys(shopFields).find(k => shopFields[k] === el) || "")){
