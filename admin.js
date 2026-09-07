@@ -980,15 +980,17 @@ async function initShopAdmin(){
 }
 
 async function loadShopConfigs(){
-  shopConfigs = new Map(Object.entries(seedShops).map(([id,cfg])=>[id,deepClone(cfg)]));
+  const seedHansa = deepClone(seedShops.hansa || {});
+  shopConfigs = new Map([["hansa", {...seedHansa, customerId:"hansa"}]]);
   try{
-    const snap=await db.collection("shops").get();
-    snap.forEach(doc=>{ const seed=shopConfigs.get(doc.id)||{}; shopConfigs.set(doc.id,{...deepClone(seed),...deepClone(doc.data()),customerId:doc.id}); });
-  }catch(err){ console.error(err); setShopState("Shopdaten konnten nicht vollständig geladen werden.","error"); }
+    const doc=await db.collection("shops").doc("hansa").get();
+    if(doc.exists){
+      shopConfigs.set("hansa", {...seedHansa, ...deepClone(doc.data()), customerId:"hansa"});
+    }
+  }catch(err){ console.error(err); setShopState("Hansa-Shopdaten konnten nicht vollständig geladen werden.","error"); }
   renderShopList();
-  const preferredShop=String(CENTRAL.defaultShop||"hansa").trim();
-  if(!selectedShopId && preferredShop && shopConfigs.has(preferredShop)) selectShop(preferredShop);
-  else if(!selectedShopId && shopConfigs.size) selectShop(shopConfigs.keys().next().value);
+  selectedShopId="";
+  selectShop("hansa");
 }
 
 function renderShopList(){
@@ -1087,7 +1089,8 @@ function renderMotifsEditor(){
 }
 addMotifBtn.addEventListener("click",()=>{ if(workingMotifs.length>=4){alert("Für die direkte Firebase-Verwaltung sind maximal 4 Motive vorgesehen.");return;} const n=workingMotifs.length+1;workingMotifs.push({id:`motiv${n}`,name:`Motiv ${n}`,file:""});renderMotifsEditor();setShopState("Neues Motiv angelegt – Bild auswählen und speichern.") });
 
-newShopBtn.addEventListener("click",()=>{
+if(newShopBtn) newShopBtn.hidden=true;
+newShopBtn?.addEventListener("click",()=>{
   selectedShopId=""; selectedShopOriginal={}; workingMotifs=[{id:"motiv1",name:"Motiv 1",file:""}]; workingLogo=""; shopForm.hidden=false; saveShopBtn.disabled=false; shopEditorTitle.textContent="Neuen Shop anlegen"; shopFields.id.disabled=false;
   shopFields.id.value=""; shopFields.name.value=""; shopFields.type.value="simple"; shopFields.price.value=15; shopFields.prefix.value=""; shopFields.email.value=CENTRAL.orderEmail||"shirtzentrale@gmail.com"; shopFields.active.checked=true; shopFields.accent.value="#111111"; shopFields.logoHeight.value=90; shopFields.previewMode.value="single"; shopFields.heading.value="Shirt gestalten"; shopFields.intro.value=""; shopFields.fixedShirtName.value=""; shopFields.fixedMotifName.value=""; refreshFixedPrintMotifOptions("motiv1","motiv1"); shopFields.fixedFrontEnabled.checked=false; shopFields.fixedFrontPosition.value="left-chest"; shopFields.fixedFrontSize.value="small"; shopFields.fixedFrontTop.value=24; shopFields.fixedFrontSide.value=32; shopFields.fixedBackEnabled.checked=false; shopFields.fixedBackPosition.value="center"; shopFields.fixedBackSize.value="large";
   initResponsivePrint({});
@@ -1143,7 +1146,7 @@ saveShopBtn.addEventListener("click",async()=>{
     const cfg=buildShopConfig(); saveShopBtn.disabled=true; setShopState("Wird gespeichert …");
     const serialized=JSON.stringify(cfg); if(serialized.length>900000) throw new Error("Shopdaten sind zu groß. Bitte kleinere Motivbilder verwenden.");
     await db.collection("shops").doc(cfg.customerId).set(cfg,{merge:false});
-    selectedShopId=cfg.customerId; selectedShopOriginal=deepClone(cfg); shopConfigs.set(cfg.customerId,deepClone(cfg)); shopFields.id.disabled=true; previewShopBtn.hidden=false; previewShopBtn.href=`/?shop=${encodeURIComponent(cfg.customerId)}`; shopEditorTitle.textContent=cfg.customerName; renderShopList(); setShopState("✓ Gespeichert – Änderungen sind sofort live.","ok");
+    selectedShopId="hansa"; cfg.customerId="hansa"; selectedShopOriginal=deepClone(cfg); shopConfigs=new Map([["hansa",deepClone(cfg)]]); shopFields.id.disabled=true; previewShopBtn.hidden=false; previewShopBtn.href=`/?shop=${encodeURIComponent(cfg.customerId)}`; shopEditorTitle.textContent=cfg.customerName; renderShopList(); setShopState("✓ Gespeichert – Änderungen sind sofort live.","ok");
     flashSavedButton(saveShopBtn, "Speichern");
     if(positionSaveRequested) flashSavedButton(savePositionBtn, "Position speichern");
     positionSaveRequested = false;

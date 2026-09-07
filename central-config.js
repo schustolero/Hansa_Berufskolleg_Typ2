@@ -1,4 +1,4 @@
-// MASTER-v27 – zentrale Systemkonfiguration und Startwerte für die Shopverwaltung.
+// Hansa Berufskolleg Typ 2 – feste Shop-Konfiguration
 window.CENTRAL_CONFIG = {
   adminEmail: "shirtzentrale@gmail.com",
   adminTitle: "Shirtprojekt – Zentrale",
@@ -26,21 +26,10 @@ window.CENTRAL_CONFIG = {
       shopType:"motifs",
       active:true,
       features:{
-        layout:"compact",
-        motifMode:"multiple",
-        allowCustomerUpload:false,
-        allowText:false,
-        allowMoveMotif:false,
-        allowResizeMotif:false,
-        allowRotateMotif:false,
-        allowBackDesign:true,
-        allowMotifColor:true,
-        showShirtColorPicker:true,
-        showMotifPicker:true,
-        showMotifColorPicker:true,
-        autoSelectSingleMotif:false,
-        maxUploadMB:8,
-        previewMode:"single"
+        layout:"compact", motifMode:"multiple", allowCustomerUpload:false, allowText:false,
+        allowMoveMotif:false, allowResizeMotif:false, allowRotateMotif:false, allowBackDesign:true,
+        allowMotifColor:true, showShirtColorPicker:true, showMotifPicker:true, showMotifColorPicker:true,
+        autoSelectSingleMotif:false, maxUploadMB:8, previewMode:"single"
       },
       motifs:[
         {id:"college",name:"Hansa College",file:"motiv-1.png"},

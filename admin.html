@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <title>Shirtprojekt – Zentrale</title>
-  <link rel="stylesheet" href="admin.css?v=29.8.5">
+  <link rel="stylesheet" href="admin.css?v=29.8.6">
 
 <style id="v2849-critical">
 /* v29.1.4 clean fallback: Grunddaten garantiert zusammengefasst */
@@ -890,7 +890,33 @@
 }
 </style>
 
-\n<style id="v2952-order-priority">\n.order-quick{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px}.order-quick strong{font-size:12px}.order-quick span{font-weight:800;color:#5c6470}.customer-details{margin:9px 0 7px;border-top:1px solid #eceef2;border-bottom:1px solid #eceef2}.customer-details>summary{list-style:none;cursor:pointer;padding:8px 0;font-size:11px;font-weight:800;color:#5d6570;display:flex;align-items:center;justify-content:space-between}.customer-details>summary::-webkit-details-marker{display:none}.customer-details>summary:after{content:"+";font-size:16px;line-height:1;color:#8a9098}.customer-details[open]>summary:after{content:"−"}.customer-details .customer-grid{border:0!important;margin:0!important;padding:2px 0 9px!important}\n@media(max-width:720px){\n  #ordersTab .order-card{padding:8px!important}\n  #ordersTab .order-top{gap:5px!important}\n  #ordersTab .order-number{font-size:12px!important}\n  #ordersTab .order-customer{display:inline-flex!important;width:auto!important;max-width:100%!important;padding:3px 6px!important;margin-top:3px!important;font-size:8.5px!important}\n  #ordersTab .order-date{font-size:7.5px!important}\n  #ordersTab .order-quick{margin-top:4px!important;gap:6px!important}\n  #ordersTab .order-quick strong,#ordersTab .order-quick span{font-size:9px!important}\n  #ordersTab .order-actions{margin-top:2px!important;gap:3px!important}\n  #ordersTab .status-select,#ordersTab .order-actions .ghost-btn{height:28px!important;min-height:28px!important;font-size:7.4px!important;padding:3px 4px!important}\n  #ordersTab .customer-details{margin:5px 0!important}\n  #ordersTab .customer-details>summary{padding:6px 1px!important;font-size:8.5px!important}\n  #ordersTab .customer-details>summary:after{font-size:13px!important}\n  #ordersTab .customer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px 7px!important;padding:0 0 7px!important}\n  #ordersTab .customer-grid span{font-size:6.7px!important}\n  #ordersTab .customer-grid strong{font-size:8.5px!important}\n  #ordersTab .items{gap:3px!important}\n  #ordersTab .item-row{padding:5px 6px!important}\n  #ordersTab .item-row strong{font-size:8.5px!important}\n  #ordersTab .item-row span{font-size:7.4px!important;margin-top:1px!important}\n  #ordersTab .order-footer{margin-top:4px!important;padding-top:5px!important;font-size:8.5px!important}\n}\n</style>\n
+
+<style id="v2952-order-priority">
+.order-quick{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px}.order-quick strong{font-size:12px}.order-quick span{font-weight:800;color:#5c6470}.customer-details{margin:9px 0 7px;border-top:1px solid #eceef2;border-bottom:1px solid #eceef2}.customer-details>summary{list-style:none;cursor:pointer;padding:8px 0;font-size:11px;font-weight:800;color:#5d6570;display:flex;align-items:center;justify-content:space-between}.customer-details>summary::-webkit-details-marker{display:none}.customer-details>summary:after{content:"+";font-size:16px;line-height:1;color:#8a9098}.customer-details[open]>summary:after{content:"−"}.customer-details .customer-grid{border:0!important;margin:0!important;padding:2px 0 9px!important}
+@media(max-width:720px){
+  #ordersTab .order-card{padding:8px!important}
+  #ordersTab .order-top{gap:5px!important}
+  #ordersTab .order-number{font-size:12px!important}
+  #ordersTab .order-customer{display:inline-flex!important;width:auto!important;max-width:100%!important;padding:3px 6px!important;margin-top:3px!important;font-size:8.5px!important}
+  #ordersTab .order-date{font-size:7.5px!important}
+  #ordersTab .order-quick{margin-top:4px!important;gap:6px!important}
+  #ordersTab .order-quick strong,#ordersTab .order-quick span{font-size:9px!important}
+  #ordersTab .order-actions{margin-top:2px!important;gap:3px!important}
+  #ordersTab .status-select,#ordersTab .order-actions .ghost-btn{height:28px!important;min-height:28px!important;font-size:7.4px!important;padding:3px 4px!important}
+  #ordersTab .customer-details{margin:5px 0!important}
+  #ordersTab .customer-details>summary{padding:6px 1px!important;font-size:8.5px!important}
+  #ordersTab .customer-details>summary:after{font-size:13px!important}
+  #ordersTab .customer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px 7px!important;padding:0 0 7px!important}
+  #ordersTab .customer-grid span{font-size:6.7px!important}
+  #ordersTab .customer-grid strong{font-size:8.5px!important}
+  #ordersTab .items{gap:3px!important}
+  #ordersTab .item-row{padding:5px 6px!important}
+  #ordersTab .item-row strong{font-size:8.5px!important}
+  #ordersTab .item-row span{font-size:7.4px!important;margin-top:1px!important}
+  #ordersTab .order-footer{margin-top:4px!important;padding-top:5px!important;font-size:8.5px!important}
+}
+</style>
+
 
 <style id="v2953-filter-status">
 /* Filter und Status klarer */
@@ -1792,6 +1818,36 @@
 }
 </style>
 
+
+<style id="v2986-final-layout-fix">
+/* v29.8.6 – finale Desktop-Farbdarstellung */
+@media (min-width:761px){
+  .v2853-workspace{grid-template-columns:minmax(420px,460px) minmax(0,1fr)!important;gap:18px!important;}
+  .v2853-left,.v2853-right{min-width:0!important;}
+  .v2853-appearance-card,.v2853-appearance-card .v2853-card-body,.v2919-shirt-palette-card{overflow:visible!important;}
+  #f140ColorPicker.v2919-f140-grid,#poliFlexTurboPicker.v2919-f140-grid{
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;width:100%!important;min-width:0!important;
+  }
+  #f140ColorPicker .v2919-f140-option,#poliFlexTurboPicker .v2919-f140-option{
+    display:grid!important;grid-template-columns:18px 16px minmax(0,1fr)!important;align-items:center!important;gap:7px!important;
+    width:100%!important;min-width:0!important;min-height:38px!important;height:auto!important;padding:6px 8px!important;margin:0!important;box-sizing:border-box!important;overflow:hidden!important;
+  }
+  #f140ColorPicker .v2919-f140-option input[type="checkbox"],#poliFlexTurboPicker .v2919-f140-option input[type="checkbox"]{
+    width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;min-height:18px!important;margin:0!important;padding:0!important;
+  }
+  #f140ColorPicker .v2919-swatch,#poliFlexTurboPicker .v2919-swatch{
+    display:block!important;width:16px!important;min-width:16px!important;max-width:16px!important;height:16px!important;min-height:16px!important;border-radius:50%!important;margin:0!important;
+  }
+  #f140ColorPicker .v2919-name,#poliFlexTurboPicker .v2919-name{
+    display:block!important;min-width:0!important;font-size:9.5px!important;line-height:1.15!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important;
+  }
+  .v2920-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+}
+@media (max-width:760px){
+  #f140ColorPicker.v2919-f140-grid,#poliFlexTurboPicker.v2919-f140-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  #f140ColorPicker .v2919-name,#poliFlexTurboPicker .v2919-name{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
+}
+</style>
 </head>
 <body>
   <main class="admin-shell">
@@ -2081,7 +2137,7 @@
   <script src="/__/firebase/8.10.1/firebase-auth.js"></script>
   <script src="/__/firebase/8.10.1/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
-  <script src="/admin.js?v=29.8.5"></script>
+  <script src="/admin.js?v=29.8.6"></script>
 
 <script id="v2849-fallback">
 (function(){
