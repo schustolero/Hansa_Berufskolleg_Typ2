@@ -1947,6 +1947,7 @@
                 <div class="position-editor-toolbar">
                   <label><span>Textil</span><select id="positionProduct"><option value="tshirt">T-Shirt</option><option value="polo">Polo-Shirt</option><option value="hoodie">Hoodie</option></select></label>
                   <label><span>Seite</span><select id="positionSide"><option value="front">Vorderseite</option><option value="back">Rückseite</option></select></label>
+                  <label><span>Ansicht</span><select id="positionDevice"><option value="desktop">Desktop</option><option value="mobile">Mobil</option></select></label>
                   <label class="position-size-control"><span>Motivgröße</span><input id="positionSize" type="range" min="18" max="65" step="1" value="36" aria-label="Motivgröße"><small class="size-scale"><span>Klein</span><span>Mittel</span><span>Groß</span></small></label>
                 </div>
                 <div class="position-editor-layout">
@@ -1958,14 +1959,14 @@
                   </div>
                   <div class="position-readout position-readout-clean">
                     <button id="savePositionBtn" type="button" class="primary-btn position-save-btn">Position speichern</button>
-                    <p>Die Position und Motivgröße werden für das gewählte Textil und die gewählte Seite gespeichert.</p>
+                    <p>Die Position und Motivgröße werden für das gewählte Textil, die gewählte Seite und die ausgewählte Ansicht gespeichert.</p>
                   </div>
                 </div>
               </div>
   </div>
 </div>
 
-              <div class="form-section position-values-section technical-position-values" aria-hidden="true"><h3>Position & Größe – direkt einstellbar</h3><p class="section-note">Hier stellst du die Druckposition direkt ein. Die Werte werden gespeichert und gelten identisch für Einzel- und Doppelansicht. X = links/rechts, Y = höher/tiefer, Größe = Motivbreite.</p>
+              <div class="form-section position-values-section technical-position-values" aria-hidden="true"><h3>Position & Größe – direkt einstellbar</h3><p class="section-note">Hier stellst du die Druckposition direkt ein. Einzel- und Doppelansicht nutzen dieselben Werte, Mobil und Desktop können jetzt getrennt gespeichert werden. X = links/rechts, Y = höher/tiefer, Größe = Motivbreite.</p>
                 <h4>T-Shirt</h4><div class="form-grid">
                   <label><span>Vorne X</span><input id="tshirtFrontX" type="number" min="10" max="90" step="0.5" value="68"></label>
                   <label><span>Vorne Y</span><input id="tshirtFrontY" type="number" min="10" max="70" step="0.5" value="20"></label>
@@ -2080,7 +2081,7 @@
   <script src="/__/firebase/8.10.1/firebase-auth.js"></script>
   <script src="/__/firebase/8.10.1/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
-  <script src="/admin.js?v=29.7.5"></script>
+  <script src="/admin.js?v=29.8.0"></script>
 
 <script id="v2849-fallback">
 (function(){

@@ -720,6 +720,7 @@ const positionXValue = document.getElementById("positionXValue");
 const positionYValue = document.getElementById("positionYValue");
 const positionWValue = document.getElementById("positionWValue");
 const savePositionBtn = document.getElementById("savePositionBtn");
+const positionDevice = document.getElementById("positionDevice");
 const designerFeatureTools = document.getElementById("designerFeatureTools");
 
 let shopConfigs = new Map();
@@ -796,6 +797,114 @@ function getPositionFieldSet(product, side){
     w: shopFields[`${key}W`]
   };
 }
+
+const RESPONSIVE_PRINT_DEFAULTS = {
+  tshirt: {
+    front: { xPct: 68, yPct: 20, widthPct: 28 },
+    back:  { xPct: 50, yPct: 36, widthPct: 50 }
+  },
+  polo: {
+    front: { xPct: 68, yPct: 22, widthPct: 28 },
+    back:  { xPct: 50, yPct: 36, widthPct: 50 }
+  },
+  hoodie: {
+    front: { xPct: 68, yPct: 22, widthPct: 36 },
+    back:  { xPct: 50, yPct: 34, widthPct: 50 }
+  }
+};
+
+function cloneResponsivePrintDefaults(){
+  return JSON.parse(JSON.stringify(Object.fromEntries(
+    Object.entries(RESPONSIVE_PRINT_DEFAULTS).map(([product, sides]) => [product, {
+      front: { mobile: { ...sides.front }, desktop: { ...sides.front } },
+      back: { mobile: { ...sides.back }, desktop: { ...sides.back } }
+    }])
+  )));
+}
+
+let responsiveProductPrint = cloneResponsivePrintDefaults();
+
+function clampPrintValue(value, min, max, fallback){
+  const numeric = Number(value);
+  if(Number.isFinite(numeric)) return Math.max(min, Math.min(max, numeric));
+  return fallback;
+}
+
+function currentPositionDevice(){
+  return positionDevice?.value === "mobile" ? "mobile" : "desktop";
+}
+
+function getResponsivePrintValues(product, side, device=currentPositionDevice()){
+  const fallback = RESPONSIVE_PRINT_DEFAULTS[product]?.[side] || { xPct: 50, yPct: 30, widthPct: 40 };
+  const branch = responsiveProductPrint?.[product]?.[side]?.[device] || {};
+  return {
+    xPct: clampPrintValue(branch.xPct, 10, 90, fallback.xPct),
+    yPct: clampPrintValue(branch.yPct, 10, 70, fallback.yPct),
+    widthPct: clampPrintValue(branch.widthPct, 8, 80, fallback.widthPct)
+  };
+}
+
+function setResponsivePrintValues(product, side, device, values={}){
+  if(!responsiveProductPrint[product]) responsiveProductPrint[product] = { front:{}, back:{} };
+  if(!responsiveProductPrint[product][side]) responsiveProductPrint[product][side] = {};
+  const fallback = RESPONSIVE_PRINT_DEFAULTS[product]?.[side] || { xPct: 50, yPct: 30, widthPct: 40 };
+  responsiveProductPrint[product][side][device] = {
+    xPct: clampPrintValue(values.xPct, 10, 90, fallback.xPct),
+    yPct: clampPrintValue(values.yPct, 10, 70, fallback.yPct),
+    widthPct: clampPrintValue(values.widthPct, 8, 80, fallback.widthPct)
+  };
+}
+
+function syncFieldsFromResponsiveStore(product = positionProduct?.value || "tshirt", side = positionSide?.value || "front"){
+  const values = getResponsivePrintValues(product, side);
+  const fields = getPositionFieldSet(product, side);
+  if(fields.x) fields.x.value = String(Math.round(values.xPct * 2) / 2);
+  if(fields.y) fields.y.value = String(Math.round(values.yPct * 2) / 2);
+  if(fields.w) fields.w.value = String(Math.round(values.widthPct * 2) / 2);
+  return values;
+}
+
+function syncResponsiveStoreFromFields(product = positionProduct?.value || "tshirt", side = positionSide?.value || "front"){
+  const fields = getPositionFieldSet(product, side);
+  setResponsivePrintValues(product, side, currentPositionDevice(), {
+    xPct: fields.x?.value,
+    yPct: fields.y?.value,
+    widthPct: fields.w?.value
+  });
+  return getResponsivePrintValues(product, side);
+}
+
+function normalizeResponsiveProductPrint(cfg, fixedPrint={}){
+  const store = cloneResponsivePrintDefaults();
+  responsiveProductPrint = cloneResponsivePrintDefaults();
+  const source = cfg?.productPrint || {};
+  ["tshirt","polo","hoodie"].forEach(product => {
+    ["front","back"].forEach(side => {
+      const fallback = RESPONSIVE_PRINT_DEFAULTS[product][side];
+      const entry = source?.[product]?.[side] || {};
+      const legacyTop = side === "front"
+        ? (product === "tshirt" ? (fixedPrint.front?.topPct ?? fallback.yPct) : fallback.yPct)
+        : (product === "tshirt" ? (fixedPrint.back?.topPct ?? fallback.yPct) : fallback.yPct);
+      const mobile = {
+        xPct: entry.mobile?.xPct ?? entry.xPct ?? fallback.xPct,
+        yPct: entry.mobile?.yPct ?? entry.yPct ?? legacyTop,
+        widthPct: entry.mobile?.widthPct ?? entry.widthPct ?? fallback.widthPct
+      };
+      const desktop = {
+        xPct: entry.desktop?.xPct ?? entry.desktopXPct ?? entry.xPct ?? mobile.xPct,
+        yPct: entry.desktop?.yPct ?? entry.desktopYPct ?? entry.yPct ?? mobile.yPct,
+        widthPct: entry.desktop?.widthPct ?? entry.desktopWidthPct ?? entry.widthPct ?? mobile.widthPct
+      };
+      setResponsivePrintValues(product, side, "mobile", mobile);
+      setResponsivePrintValues(product, side, "desktop", desktop);
+      store[product][side].mobile = { ...getResponsivePrintValues(product, side, "mobile") };
+      store[product][side].desktop = { ...getResponsivePrintValues(product, side, "desktop") };
+    });
+  });
+  responsiveProductPrint = store;
+  return store;
+}
+
 function selectedPositionMotif(){
   const side = positionSide?.value || "front";
   const select = side === "front" ? shopFields.fixedFrontMotif : shopFields.fixedBackMotif;
@@ -833,10 +942,10 @@ function refreshPositionEditor(){
   if(!positionStage || !positionMotif || !positionShirt) return;
   const product = positionProduct.value || "tshirt";
   const side = positionSide.value || "front";
-  const fields = getPositionFieldSet(product, side);
-  const x = Number(fields.x?.value || (side === "front" ? 68 : 50));
-  const y = Number(fields.y?.value || (side === "front" ? 20 : 36));
-  const w = Number(fields.w?.value || (side === "front" ? 28 : 50));
+  const values = syncFieldsFromResponsiveStore(product, side);
+  const x = Number(values.xPct || (side === "front" ? 68 : 50));
+  const y = Number(values.yPct || (side === "front" ? 20 : 36));
+  const w = Number(values.widthPct || (side === "front" ? 28 : 50));
   const shirtSrc = product === "polo"
     ? (side === "front" ? "polo-front-template.png" : "polo-back-template.png")
     : product === "hoodie"
@@ -863,22 +972,35 @@ function refreshPositionEditor(){
   window.updateV2856PrintTable?.();
 }
 function writePositionValues(x, y, w){
-  const fields = getPositionFieldSet(positionProduct.value || "tshirt", positionSide.value || "front");
+  const product = positionProduct.value || "tshirt";
+  const side = positionSide.value || "front";
+  const fields = getPositionFieldSet(product, side);
   if(Number.isFinite(x)) fields.x.value = String(Math.round(x * 2) / 2);
   if(Number.isFinite(y)) fields.y.value = String(Math.round(y * 2) / 2);
   if(Number.isFinite(w)) fields.w.value = String(Math.round(w * 2) / 2);
+  syncResponsiveStoreFromFields(product, side);
   refreshPositionEditor();
-  setShopState("Position geändert – oben Speichern klicken.");
+  setShopState(`Position für ${currentPositionDevice()==="mobile"?"Mobil":"Desktop"} geändert – oben Speichern klicken.`);
 }
 function bindPositionEditor(){
   if(!positionStage || !positionMotif || !positionPrintZone) return;
-  [positionProduct, positionSide].forEach(el => el?.addEventListener("change", refreshPositionEditor));
+  if(positionDevice && !positionDevice.value){
+    positionDevice.value = window.matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop";
+  }
+  [positionProduct, positionSide, positionDevice].forEach(el => el?.addEventListener("change", refreshPositionEditor));
   shopFields.fixedShirtHex?.addEventListener("input", refreshPositionEditor);
   positionSize?.addEventListener("input", () => writePositionValues(NaN, NaN, Number(positionSize.value)));
   [shopFields.fixedFrontMotif, shopFields.fixedBackMotif].forEach(el => el?.addEventListener("change", refreshPositionEditor));
-  Object.values(shopFields).forEach(el => {
-    if(el && /^(tshirt|polo|hoodie)(Front|Back)(X|Y|W)$/.test(Object.keys(shopFields).find(k => shopFields[k] === el) || "")){
-      el.addEventListener("input", refreshPositionEditor);
+  Object.entries(shopFields).forEach(([key, el]) => {
+    if(el && /^(tshirt|polo|hoodie)(Front|Back)(X|Y|W)$/.test(key)){
+      el.addEventListener("input", () => {
+        const match = key.match(/^(tshirt|polo|hoodie)(Front|Back)(X|Y|W)$/);
+        if(!match) return;
+        const product = match[1];
+        const side = match[2] === "Front" ? "front" : "back";
+        syncResponsiveStoreFromFields(product, side);
+        if((positionProduct.value || "tshirt") === product && (positionSide.value || "front") === side) refreshPositionEditor();
+      });
     }
   });
   let dragging = false;
@@ -902,6 +1024,7 @@ function bindPositionEditor(){
   positionMotif.addEventListener("pointerup", ev => { dragging = false; positionMotif.releasePointerCapture?.(ev.pointerId); });
   positionMotif.addEventListener("pointercancel", () => { dragging = false; });
   savePositionBtn?.addEventListener("click", () => {
+    syncResponsiveStoreFromFields(positionProduct.value || "tshirt", positionSide.value || "front");
     positionSaveRequested = true;
     saveShopBtn?.click();
   });
@@ -946,8 +1069,7 @@ async function loadShopConfigs(){
     snap.forEach(doc=>{ const seed=shopConfigs.get(doc.id)||{}; shopConfigs.set(doc.id,{...deepClone(seed),...deepClone(doc.data()),customerId:doc.id}); });
   }catch(err){ console.error(err); setShopState("Shopdaten konnten nicht vollständig geladen werden.","error"); }
   renderShopList();
-  const preferredShop = String(CENTRAL.defaultShop || "").trim();
-  if(!selectedShopId && preferredShop && shopConfigs.has(preferredShop)) selectShop(preferredShop);
+  if(!selectedShopId && shopConfigs.has("tg-solingen")) selectShop("tg-solingen");
   else if(!selectedShopId && shopConfigs.size) selectShop(shopConfigs.keys().next().value);
 }
 
@@ -983,14 +1105,8 @@ function selectShop(id){
   const fp=cfg.fixedPrint||{}; refreshFixedPrintMotifOptions(fp.front?.motifId||"",fp.back?.motifId||"");
   shopFields.fixedFrontEnabled.checked=!!fp.front?.enabled; shopFields.fixedFrontPosition.value=fp.front?.position||"left-chest"; shopFields.fixedFrontSize.value=fp.front?.size||"small"; shopFields.fixedFrontTop.value=Number(fp.front?.topPct ?? 24); shopFields.fixedFrontSide.value=Number(fp.front?.sidePct ?? 32);
   shopFields.fixedBackEnabled.checked=!!fp.back?.enabled; shopFields.fixedBackPosition.value=fp.back?.position||"center"; shopFields.fixedBackSize.value=fp.back?.size||"large"; shopFields.fixedBackTop.value=Number(fp.back?.topPct ?? 36);
-  const pp=cfg.productPrint||{};
-  const tshirt=pp.tshirt||{}; const polo=pp.polo||{}; const hoodie=pp.hoodie||{};
-  shopFields.tshirtFrontX.value=Number(tshirt.front?.xPct ?? 68); shopFields.tshirtFrontY.value=Number(tshirt.front?.yPct ?? fp.front?.topPct ?? 20); shopFields.tshirtFrontW.value=Number(tshirt.front?.widthPct ?? 28);
-  shopFields.tshirtBackX.value=Number(tshirt.back?.xPct ?? 50); shopFields.tshirtBackY.value=Number(tshirt.back?.yPct ?? fp.back?.topPct ?? 36); shopFields.tshirtBackW.value=Number(tshirt.back?.widthPct ?? 50);
-  shopFields.poloFrontX.value=Number(polo.front?.xPct ?? 68); shopFields.poloFrontY.value=Number(polo.front?.yPct ?? 22); shopFields.poloFrontW.value=Number(polo.front?.widthPct ?? 28);
-  shopFields.poloBackX.value=Number(polo.back?.xPct ?? 50); shopFields.poloBackY.value=Number(polo.back?.yPct ?? 36); shopFields.poloBackW.value=Number(polo.back?.widthPct ?? 50);
-  shopFields.hoodieFrontX.value=Number(hoodie.front?.xPct ?? 68); shopFields.hoodieFrontY.value=Number(hoodie.front?.yPct ?? 22); shopFields.hoodieFrontW.value=Number(hoodie.front?.widthPct ?? 36);
-  shopFields.hoodieBackX.value=Number(hoodie.back?.xPct ?? 50); shopFields.hoodieBackY.value=Number(hoodie.back?.yPct ?? 34); { const hb=Number(hoodie.back?.widthPct ?? 50); shopFields.hoodieBackW.value=(hb===46?50:hb); }
+  normalizeResponsiveProductPrint(cfg, fp);
+  syncFieldsFromResponsiveStore(positionProduct?.value || "tshirt", positionSide?.value || "front");
   fillPrintData(cfg);
   if(productionFileUrl) productionFileUrl.value = cfg.productionFile || cfg.printData?.productionFile || "";
   updateFeatureVisibility(cfg.shopType||"simple");
@@ -1056,8 +1172,9 @@ addMotifBtn.addEventListener("click",()=>{ if(workingMotifs.length>=4){alert("F�
 newShopBtn.addEventListener("click",()=>{
   selectedShopId=""; selectedShopOriginal={}; workingMotifs=[{id:"motiv1",name:"Motiv 1",file:""}]; workingLogo=""; shopForm.hidden=false; saveShopBtn.disabled=false; shopEditorTitle.textContent="Neuen Shop anlegen"; shopFields.id.disabled=false;
   shopFields.id.value=""; shopFields.name.value=""; shopFields.type.value="simple"; shopFields.price.value=15; shopFields.prefix.value=""; shopFields.email.value=CENTRAL.orderEmail||"shirtzentrale@gmail.com"; shopFields.active.checked=true; shopFields.accent.value="#111111"; shopFields.logoHeight.value=90; shopFields.previewMode.value="single"; shopFields.heading.value="Shirt gestalten"; shopFields.intro.value=""; shopFields.fixedShirtName.value=""; shopFields.fixedMotifName.value=""; refreshFixedPrintMotifOptions("motiv1","motiv1"); shopFields.fixedFrontEnabled.checked=false; shopFields.fixedFrontPosition.value="left-chest"; shopFields.fixedFrontSize.value="small"; shopFields.fixedFrontTop.value=24; shopFields.fixedFrontSide.value=32; shopFields.fixedBackEnabled.checked=false; shopFields.fixedBackPosition.value="center"; shopFields.fixedBackSize.value="large";
-  shopFields.tshirtFrontX.value=68; shopFields.tshirtFrontY.value=20; shopFields.tshirtFrontW.value=28; shopFields.tshirtBackX.value=50; shopFields.tshirtBackY.value=36; shopFields.tshirtBackW.value=50;
-  shopFields.poloFrontX.value=68; shopFields.poloFrontY.value=22; shopFields.poloFrontW.value=28; shopFields.poloBackX.value=50; shopFields.poloBackY.value=36; shopFields.poloBackW.value=50; shopFields.hoodieFrontX.value=68; shopFields.hoodieFrontY.value=22; shopFields.hoodieFrontW.value=36; shopFields.hoodieBackX.value=50; shopFields.hoodieBackY.value=34; shopFields.hoodieBackW.value=50; fillPrintData({}); typePreset("simple"); updateLogoPreview(); renderMotifsEditor(); refreshPositionEditor(); previewShopBtn.hidden=true; setShopState("Neue Shop-ID und Daten eintragen."); renderShopList();
+  responsiveProductPrint = cloneResponsivePrintDefaults();
+  syncFieldsFromResponsiveStore(positionProduct?.value || "tshirt", positionSide?.value || "front");
+  fillPrintData({}); typePreset("simple"); updateLogoPreview(); renderMotifsEditor(); refreshPositionEditor(); previewShopBtn.hidden=true; setShopState("Neue Shop-ID und Daten eintragen."); renderShopList();
 });
 shopFields.name.addEventListener("blur",()=>{ if(!selectedShopId && !shopFields.id.value) shopFields.id.value=slugify(shopFields.name.value); });
 
@@ -1073,11 +1190,25 @@ function buildShopConfig(){
     back:{enabled:shopFields.fixedBackEnabled.checked,motifId:shopFields.fixedBackMotif.value||"motiv1",position:shopFields.fixedBackPosition.value||"center",size:shopFields.fixedBackSize.value||"large",topPct:Math.max(10,Math.min(70,Number(shopFields.fixedBackTop.value)||36))}
   };
   const clamp=(v,min,max,fallback)=>Math.max(min,Math.min(max,Number(v)||fallback));
+  syncResponsiveStoreFromFields(positionProduct?.value || "tshirt", positionSide?.value || "front");
+  const buildResponsiveEntry = (product, side) => {
+    const fallback = RESPONSIVE_PRINT_DEFAULTS[product][side];
+    const mobile = getResponsivePrintValues(product, side, "mobile");
+    const desktop = getResponsivePrintValues(product, side, "desktop");
+    return {
+      xPct: clamp(mobile.xPct, 10, 90, fallback.xPct),
+      yPct: clamp(mobile.yPct, 10, 70, fallback.yPct),
+      widthPct: clamp(mobile.widthPct, 8, 80, fallback.widthPct),
+      desktopXPct: clamp(desktop.xPct, 10, 90, mobile.xPct),
+      desktopYPct: clamp(desktop.yPct, 10, 70, mobile.yPct),
+      desktopWidthPct: clamp(desktop.widthPct, 8, 80, mobile.widthPct)
+    };
+  };
   cfg.productPrint={
     ...(old.productPrint||{}),
-    tshirt:{front:{xPct:clamp(shopFields.tshirtFrontX.value,10,90,68),yPct:clamp(shopFields.tshirtFrontY.value,10,70,20),widthPct:clamp(shopFields.tshirtFrontW.value,8,70,28)},back:{xPct:clamp(shopFields.tshirtBackX.value,10,90,50),yPct:clamp(shopFields.tshirtBackY.value,10,70,36),widthPct:clamp(shopFields.tshirtBackW.value,10,80,50)}},
-    polo:{front:{xPct:clamp(shopFields.poloFrontX.value,10,90,68),yPct:clamp(shopFields.poloFrontY.value,10,70,22),widthPct:clamp(shopFields.poloFrontW.value,8,70,28)},back:{xPct:clamp(shopFields.poloBackX.value,10,90,50),yPct:clamp(shopFields.poloBackY.value,10,70,36),widthPct:clamp(shopFields.poloBackW.value,10,80,50)}},
-    hoodie:{front:{xPct:clamp(shopFields.hoodieFrontX.value,10,90,68),yPct:clamp(shopFields.hoodieFrontY.value,10,70,22),widthPct:clamp(shopFields.hoodieFrontW.value,8,70,36)},back:{xPct:clamp(shopFields.hoodieBackX.value,10,90,50),yPct:clamp(shopFields.hoodieBackY.value,10,70,34),widthPct:clamp(shopFields.hoodieBackW.value,10,80,50)}}
+    tshirt:{front:buildResponsiveEntry("tshirt","front"),back:buildResponsiveEntry("tshirt","back")},
+    polo:{front:buildResponsiveEntry("polo","front"),back:buildResponsiveEntry("polo","back")},
+    hoodie:{front:buildResponsiveEntry("hoodie","front"),back:buildResponsiveEntry("hoodie","back")}
   };
   cfg.printData=collectPrintData();
   cfg.productionFile=(productionFileUrl?.value||"").trim();
@@ -1407,8 +1538,9 @@ saveShopBtn.addEventListener("click",async()=>{
       const row=rows.find(r=>r[0]===sel.dataset.product&&r[1]===sel.dataset.side);
       if(!row) return;
       row[6].value=String(sizeValue(sel.dataset.product,sel.dataset.side,sel.value));
+      syncResponsiveStoreFromFields(sel.dataset.product, sel.dataset.side);
       if(positionProduct.value===sel.dataset.product&&positionSide.value===sel.dataset.side) refreshPositionEditor();
-      setShopState("Motivgröße geändert – bitte speichern.");
+      setShopState(`Motivgröße für ${currentPositionDevice()==="mobile"?"Mobil":"Desktop"} geändert – bitte speichern.`);
     }));
     table.querySelectorAll(".v284-edit-print").forEach(btn=>btn.addEventListener("click",()=>{
       positionProduct.value=btn.dataset.product;
@@ -1680,8 +1812,9 @@ saveShopBtn.addEventListener("click",async()=>{
       if(!item) return;
       const field=sel.dataset.side==='front'?item.front:item.back;
       field.value=String(sizeValue(sel.dataset.product,sel.dataset.side,sel.value));
+      syncResponsiveStoreFromFields(sel.dataset.product, sel.dataset.side);
       if(product?.value===sel.dataset.product&&side?.value===sel.dataset.side) refreshPositionEditor();
-      setShopState('Motivgröße geändert – bitte speichern.');
+      setShopState(`Motivgröße für ${currentPositionDevice()==="mobile"?"Mobil":"Desktop"} geändert – bitte speichern.`);
     }));
     table.querySelectorAll('.v2856-position-btn').forEach(btn=>btn.addEventListener('click',()=>{
       if(product){ product.value=btn.dataset.product; product.dispatchEvent(new Event('change',{bubbles:true})); }
@@ -1741,7 +1874,7 @@ saveShopBtn.addEventListener("click",async()=>{
   document.getElementById('v284Sidebar')?.classList.add('v2853-dark-sidebar');
 
   // Versionsbadge eindeutig aktualisieren.
-  document.querySelectorAll('.v2849-version').forEach(el=>el.textContent='Hansa · Typ 2');
+  document.querySelectorAll('.v2849-version').forEach(el=>el.textContent='v29.7.5');
 })();
 
 
