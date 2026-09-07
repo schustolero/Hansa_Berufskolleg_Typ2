@@ -1316,7 +1316,7 @@ body.v2853-reference #shopForm{display:block!important}
 .v2853-colors-card .compact-color-row{display:grid!important;grid-template-columns:minmax(0,1fr) 54px minmax(0,1fr) 54px 64px!important;gap:10px!important;align-items:end!important}
 .v2853-colors-card input[type=color]{width:42px!important;height:42px!important;border-radius:9px!important}
 
-.v2853-article-controls{display:grid;grid-template-columns:1fr 1.2fr 1fr .9fr;gap:12px;margin-bottom:14px}
+.v2853-article-controls{display:grid;grid-template-columns:1fr 1.2fr 1fr .9fr .9fr;gap:12px;margin-bottom:14px}
 .v2853-article-controls label>span{display:block;font-size:12px;font-weight:750;color:#4b5561;margin-bottom:6px}
 .v2853-article-controls select,.v2853-article-controls input{width:100%;height:42px;border:1px solid #dce1e7;border-radius:9px;background:#fff;padding:0 12px}
 .v2853-color-readonly{height:42px;border:1px solid #dce1e7;border-radius:9px;display:flex;align-items:center;gap:9px;padding:0 12px;background:#fff}
@@ -2391,3 +2391,21 @@ body.v284-admin #ordersTab .order-card{padding:16px!important}
     justify-self:stretch!important;
   }
 }
+
+/* v29.9.0 – direkter Höhenregler für die Motivposition */
+.position-height-control{min-width:170px!important}
+.position-height-control input[type="range"]{width:100%;accent-color:#f2c100}
+.height-scale{display:flex;justify-content:space-between;font-size:10px;color:#7a8491;margin-top:2px}
+
+
+/* v29.9.1 – EINHEITLICHE Positionierungsgeometrie.
+   430px Arbeitsfläche = 90px Headroom + 340px bisherige Druckfläche.
+   Diese letzte Regel überschreibt die alten v28.5.8-Duplikate bewusst. */
+.v2853-preview-shell .position-print-zone{
+  left:27.966%!important;
+  top:9.1%!important;
+  width:44.068%!important;
+  height:62.7%!important;
+  overflow:visible!important;
+}
+.position-motif{max-height:none!important;}
