@@ -347,21 +347,17 @@ function getConfiguredMotif(view) {
   return { cfg, motif };
 }
 
-function isMobilePrintViewport() {
-  return window.matchMedia("(max-width: 760px)").matches;
-}
-
 function getUnifiedPrintLayout(view, cfg) {
   const product = SHOP.productPrint && SHOP.productPrint[currentProductId] && SHOP.productPrint[currentProductId][view];
   if (product) {
-    const mobile = isMobilePrintViewport();
-    const xRaw = mobile ? product.xPct : (product.desktopXPct ?? product.desktop?.xPct ?? product.xPct);
-    const yRaw = mobile ? product.yPct : (product.desktopYPct ?? product.desktop?.yPct ?? product.yPct);
-    const wRaw = mobile ? product.widthPct : (product.desktopWidthPct ?? product.desktop?.widthPct ?? product.widthPct);
+    const desktop = !window.matchMedia("(max-width:760px)").matches;
+    const x = desktop ? (product.desktopXPct ?? product.xPct) : product.xPct;
+    const y = desktop ? (product.desktopYPct ?? product.yPct) : product.yPct;
+    const w = desktop ? (product.desktopWidthPct ?? product.widthPct) : product.widthPct;
     return {
-      xPct: Math.max(8, Math.min(92, Number(xRaw) || 50)),
-      yPct: Math.max(10, Math.min(70, Number(yRaw) || (view === "front" ? 20 : 36))),
-      widthPct: Math.max(8, Math.min(80, Number(wRaw) || (view === "front" ? 22 : 50)))
+      xPct: Math.max(8, Math.min(92, Number(x) || 50)),
+      yPct: Math.max(10, Math.min(70, Number(y) || (view === "front" ? 20 : 36))),
+      widthPct: Math.max(8, Math.min(80, Number(w) || (view === "front" ? 22 : 50)))
     };
   }
   const size = cfg?.size || "medium";
@@ -1172,31 +1168,16 @@ async function initializeFixedPrints() {
 applyPreviewMode();
 initializeFixedPrints();
 
-(function syncResponsivePrintLayout(){
-  let lastMode = isMobilePrintViewport();
-  let resizeTimer = null;
-
-  function updateLayoutIfNeeded(){
-    const nextMode = isMobilePrintViewport();
-    if(nextMode === lastMode) return;
-    lastMode = nextMode;
-
-    const imageObjects = canvas.getObjects().filter(obj => obj && obj.type === "image" && obj.motifSrc && obj.motifKind !== "upload");
-    imageObjects.forEach(obj => applyFixedMotifLayout(obj, obj.motifId || "college"));
-    if(imageObjects.length){
-      canvas.requestRenderAll();
-      viewStates[currentView] = canvas.toJSON(["motifId", "motifSrc", "motifColor", "motifColorLabel"]);
-    }
-    if (FEATURES.previewMode === "dual") renderDualPreview();
-  }
-
-  const onResize = () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(updateLayoutIfNeeded, 120);
-  };
-
-  window.addEventListener('resize', onResize, { passive: true });
-  window.addEventListener('orientationchange', onResize, { passive: true });
+(function responsivePrintViewportRefresh(){
+  let lastMobile=window.matchMedia("(max-width:760px)").matches;
+  window.addEventListener("resize",()=>{
+    const nowMobile=window.matchMedia("(max-width:760px)").matches;
+    if(nowMobile===lastMobile) return;
+    lastMobile=nowMobile;
+    canvas.getObjects().forEach(obj=>{ if(obj?.motifSrc && obj.type==="image") applyFixedMotifLayout(obj,obj.motifId||"college"); });
+    canvas.requestRenderAll();
+    if(FEATURES.previewMode==="dual") renderDualPreview();
+  },{passive:true});
 })();
 
 // v29.1.5: Mobile Vorschau exakt wie Admin skalieren.
