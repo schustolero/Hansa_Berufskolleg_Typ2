@@ -900,7 +900,9 @@ function refreshPositionEditor(){
   window.updateV2856PrintTable?.();
 }
 function writePositionValues(x, y, w){
-  const fields = getPositionFieldSet(positionProduct.value || "tshirt", positionSide.value || "front");
+  const product = positionProduct?.value || "tshirt";
+  const side = positionSide?.value || "front";
+  const fields = getPositionFieldSet(product, side);
   if(Number.isFinite(x)) fields.x.value = String(Math.round(x * 2) / 2);
   if(Number.isFinite(y)) fields.y.value = String(Math.round(y * 2) / 2);
   if(Number.isFinite(w)) fields.w.value = String(Math.round(w * 2) / 2);
