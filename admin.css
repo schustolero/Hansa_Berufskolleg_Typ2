@@ -2396,3 +2396,16 @@ body.v284-admin #ordersTab .order-card{padding:16px!important}
 .position-height-control{min-width:170px!important}
 .position-height-control input[type="range"]{width:100%;accent-color:#f2c100}
 .height-scale{display:flex;justify-content:space-between;font-size:10px;color:#7a8491;margin-top:2px}
+
+
+/* v29.9.1 – EINHEITLICHE Positionierungsgeometrie.
+   430px Arbeitsfläche = 90px Headroom + 340px bisherige Druckfläche.
+   Diese letzte Regel überschreibt die alten v28.5.8-Duplikate bewusst. */
+.v2853-preview-shell .position-print-zone{
+  left:27.966%!important;
+  top:9.1%!important;
+  width:44.068%!important;
+  height:62.7%!important;
+  overflow:visible!important;
+}
+.position-motif{max-height:none!important;}

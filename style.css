@@ -1200,3 +1200,19 @@ body[data-shop-layout="designer"] .print-zone { outline: 1px dashed rgba(0,0,0,.
     transform: translate(-50%, -50%) !important;
   }
 }
+
+
+/* v29.9.1 – Live-Shop nutzt dieselbe 430px-Geometrie wie die Positionslogik.
+   Die bisherigen 340px bleiben unten unverändert; 90px Headroom kommen oben dazu. */
+.print-zone,
+.print-zone.back{
+  height:430px!important;
+  top:40.4%!important;
+  overflow:hidden!important;
+}
+.canvas-container,
+.print-zone canvas,
+.print-zone.back .canvas-container,
+.print-zone.back canvas{
+  height:430px!important;
+}

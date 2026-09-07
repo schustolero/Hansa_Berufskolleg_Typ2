@@ -890,7 +890,7 @@ function refreshPositionEditor(){
     positionMotif.removeAttribute("src");
   }
   positionMotif.style.left = `${x}%`;
-  positionMotif.style.top = `${y}%`;
+  positionMotif.style.top = `${storedYToStagePct(y)}%`;
   positionMotif.style.width = `${w}%`;
   if(positionSize) positionSize.value = String(w);
   if(positionYSlider) positionYSlider.value = String(Math.max(-35, Math.min(90, y)));
@@ -912,7 +912,7 @@ function writePositionValues(x, y, w){
   const v = responsiveValues(product, side);
   if(positionMotif){
     positionMotif.style.left = `${v.xPct}%`;
-    positionMotif.style.top = `${v.yPct}%`;
+    positionMotif.style.top = `${storedYToStagePct(v.yPct)}%`;
     positionMotif.style.width = `${v.widthPct}%`;
   }
   if(positionSize && Number.isFinite(w)) positionSize.value = String(v.widthPct);
@@ -952,10 +952,11 @@ function bindPositionEditor(){
     const px = stageRect.left + stageRect.width * (stageX / 100);
     const py = stageRect.top + stageRect.height * (stageY / 100);
     let x = ((px - zoneRect.left) / zoneRect.width) * 100;
-    let y = ((py - zoneRect.top) / zoneRect.height) * 100;
+    const zoneStageY = ((py - zoneRect.top) / zoneRect.height) * 100;
+    let y = stagePctToStoredY(zoneStageY);
 
     x = Math.max(-40, Math.min(140, x));
-    y = Math.max(-120, Math.min(180, y));
+    y = Math.max(-35, Math.min(90, y));
     writePositionValues(x, y, NaN);
     ev.preventDefault();
   };
