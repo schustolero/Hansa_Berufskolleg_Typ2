@@ -903,11 +903,19 @@ function writePositionValues(x, y, w){
   const product = positionProduct?.value || "tshirt";
   const side = positionSide?.value || "front";
   const fields = getPositionFieldSet(product, side);
-  if(Number.isFinite(x)) fields.x.value = String(Math.round(x * 2) / 2);
-  if(Number.isFinite(y)) fields.y.value = String(Math.round(y * 2) / 2);
-  if(Number.isFinite(w)) fields.w.value = String(Math.round(w * 2) / 2);
+  if(Number.isFinite(x) && fields.x) fields.x.value = String(Math.round(x * 2) / 2);
+  if(Number.isFinite(y) && fields.y) fields.y.value = String(Math.round(y * 2) / 2);
+  if(Number.isFinite(w) && fields.w) fields.w.value = String(Math.round(w * 2) / 2);
   responsiveFromFields(product, side);
-  refreshPositionEditor();
+  const v = responsiveValues(product, side);
+  if(positionMotif){
+    positionMotif.style.left = `${v.xPct}%`;
+    positionMotif.style.top = `${v.yPct}%`;
+    positionMotif.style.width = `${v.widthPct}%`;
+  }
+  if(positionSize && Number.isFinite(w)) positionSize.value = String(v.widthPct);
+  if(positionSizeValue) positionSizeValue.textContent = friendlySizeLabel(v.widthPct);
+  if(positionWValue) positionWValue.textContent = friendlySizeLabel(v.widthPct);
   setShopState(`Position ${positionDeviceKey()==="mobile"?"Mobil":"Desktop"} geändert – oben Speichern klicken.`);
 }
 function bindPositionEditor(){
@@ -923,25 +931,35 @@ function bindPositionEditor(){
     }
   });
   let dragging = false;
+  let dragPointerId = null;
+  positionMotif.draggable = false;
   const move = (ev) => {
     if(!dragging) return;
     const r = positionPrintZone.getBoundingClientRect();
-    const point = ev.touches?.[0] || ev;
-    let x = ((point.clientX - r.left) / r.width) * 100;
-    let y = ((point.clientY - r.top) / r.height) * 100;
+    if(!r.width || !r.height) return;
+    let x = ((ev.clientX - r.left) / r.width) * 100;
+    let y = ((ev.clientY - r.top) / r.height) * 100;
     x = Math.max(8, Math.min(92, x));
     y = Math.max(6, Math.min(78, y));
     writePositionValues(x, y, NaN);
     ev.preventDefault();
   };
+  positionMotif.addEventListener("dragstart", ev => ev.preventDefault());
   positionMotif.addEventListener("pointerdown", ev => {
     dragging = true;
-    positionMotif.setPointerCapture?.(ev.pointerId);
+    dragPointerId = ev.pointerId;
+    try { positionMotif.setPointerCapture(ev.pointerId); } catch(_) {}
     ev.preventDefault();
   });
-  positionMotif.addEventListener("pointermove", move);
-  positionMotif.addEventListener("pointerup", ev => { dragging = false; positionMotif.releasePointerCapture?.(ev.pointerId); });
-  positionMotif.addEventListener("pointercancel", () => { dragging = false; });
+  window.addEventListener("pointermove", move, {passive:false});
+  const stopDrag = (ev) => {
+    if(!dragging) return;
+    dragging = false;
+    try { if(dragPointerId != null) positionMotif.releasePointerCapture(dragPointerId); } catch(_) {}
+    dragPointerId = null;
+  };
+  window.addEventListener("pointerup", stopDrag);
+  window.addEventListener("pointercancel", stopDrag);
   savePositionBtn?.addEventListener("click", () => {
     responsiveFromFields(positionProduct.value || "tshirt", positionSide.value || "front");
     positionSaveRequested = true;
@@ -1513,6 +1531,7 @@ saveShopBtn.addEventListener("click",async()=>{
   const sizeControl=toolbar?.querySelector('.position-size-control');
   const productLabel=toolbar?.querySelector('label:has(#positionProduct)');
   const sideLabel=toolbar?.querySelector('label:has(#positionSide)');
+  const deviceLabel=toolbar?.querySelector('label:has(#positionDevice)');
 
   const workspace=document.createElement('div');
   workspace.id='v2853Workspace';
@@ -1594,7 +1613,8 @@ saveShopBtn.addEventListener("click",async()=>{
   const color=document.createElement('label');
   color.innerHTML='<span>Farbe</span><div class="v2853-color-readonly"><i></i><b id="v2853ColorName">Royal Blue</b></div>';
   articleControls.appendChild(color);
-  if(sideLabel){ sideLabel.querySelector('span').textContent='Ansicht'; articleControls.appendChild(sideLabel); }
+  if(sideLabel){ sideLabel.querySelector('span').textContent='Seite'; articleControls.appendChild(sideLabel); }
+  if(deviceLabel){ deviceLabel.querySelector('span').textContent='Ansicht'; articleControls.appendChild(deviceLabel); }
   article.body.appendChild(articleControls);
 
   const previewShell=document.createElement('div');
