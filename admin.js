@@ -935,12 +935,23 @@ function bindPositionEditor(){
   positionMotif.draggable = false;
   const move = (ev) => {
     if(!dragging) return;
-    const r = positionPrintZone.getBoundingClientRect();
-    if(!r.width || !r.height) return;
-    let x = ((ev.clientX - r.left) / r.width) * 100;
-    let y = ((ev.clientY - r.top) / r.height) * 100;
-    x = Math.max(8, Math.min(92, x));
-    y = Math.max(-80, Math.min(100, y));
+    // Pointer zuerst relativ zur GESAMTEN Shirt-Vorschau bestimmen.
+    // Anschließend in die Koordinaten der Druckzone zurückrechnen.
+    // So kann das Motiv auch oberhalb/unterhalb der sichtbaren Druckzone bewegt werden.
+    const stageRect = positionStage.getBoundingClientRect();
+    const zoneRect = positionPrintZone.getBoundingClientRect();
+    if(!stageRect.width || !stageRect.height || !zoneRect.width || !zoneRect.height) return;
+
+    const stageX = Math.max(2, Math.min(98, ((ev.clientX - stageRect.left) / stageRect.width) * 100));
+    const stageY = Math.max(2, Math.min(98, ((ev.clientY - stageRect.top) / stageRect.height) * 100));
+
+    const px = stageRect.left + stageRect.width * (stageX / 100);
+    const py = stageRect.top + stageRect.height * (stageY / 100);
+    let x = ((px - zoneRect.left) / zoneRect.width) * 100;
+    let y = ((py - zoneRect.top) / zoneRect.height) * 100;
+
+    x = Math.max(-40, Math.min(140, x));
+    y = Math.max(-120, Math.min(180, y));
     writePositionValues(x, y, NaN);
     ev.preventDefault();
   };
@@ -1137,8 +1148,8 @@ function buildShopConfig(){
   const rp=(product,side)=>{
     const d=RESPONSIVE_PRINT_DEFAULTS[product][side], mobile=responsiveValues(product,side,"mobile"), desktop=responsiveValues(product,side,"desktop");
     return {
-      xPct:clamp(mobile.xPct,10,90,d.xPct), yPct:clamp(mobile.yPct,-80,100,d.yPct), widthPct:clamp(mobile.widthPct,8,80,d.widthPct),
-      desktopXPct:clamp(desktop.xPct,10,90,mobile.xPct), desktopYPct:clamp(desktop.yPct,-80,100,mobile.yPct), desktopWidthPct:clamp(desktop.widthPct,8,80,mobile.widthPct)
+      xPct:clamp(mobile.xPct,10,90,d.xPct), yPct:clamp(mobile.yPct,-120,180,d.yPct), widthPct:clamp(mobile.widthPct,8,80,d.widthPct),
+      desktopXPct:clamp(desktop.xPct,10,90,mobile.xPct), desktopYPct:clamp(desktop.yPct,-120,180,mobile.yPct), desktopWidthPct:clamp(desktop.widthPct,8,80,mobile.widthPct)
     };
   };
   cfg.productPrint={
