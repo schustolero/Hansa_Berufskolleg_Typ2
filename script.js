@@ -350,14 +350,10 @@ function getConfiguredMotif(view) {
 function getUnifiedPrintLayout(view, cfg) {
   const product = SHOP.productPrint && SHOP.productPrint[currentProductId] && SHOP.productPrint[currentProductId][view];
   if (product) {
-    const desktop = !window.matchMedia("(max-width:760px)").matches;
-    const x = desktop ? (product.desktopXPct ?? product.xPct) : product.xPct;
-    const y = desktop ? (product.desktopYPct ?? product.yPct) : product.yPct;
-    const w = desktop ? (product.desktopWidthPct ?? product.widthPct) : product.widthPct;
     return {
-      xPct: Math.max(8, Math.min(92, Number(x) || 50)),
-      yPct: Math.max(-35, Math.min(90, Number.isFinite(Number(y)) ? Number(y) : (view === "front" ? 20 : 36))),
-      widthPct: Math.max(8, Math.min(80, Number(w) || (view === "front" ? 22 : 50)))
+      xPct: Math.max(8, Math.min(92, Number(product.xPct) || 50)),
+      yPct: Math.max(10, Math.min(70, Number(product.yPct) || (view === "front" ? 20 : 36))),
+      widthPct: Math.max(8, Math.min(80, Number(product.widthPct) || (view === "front" ? 22 : 50)))
     };
   }
   const size = cfg?.size || "medium";
@@ -1167,18 +1163,6 @@ async function initializeFixedPrints() {
 }
 applyPreviewMode();
 initializeFixedPrints();
-
-(function responsivePrintViewportRefresh(){
-  let lastMobile=window.matchMedia("(max-width:760px)").matches;
-  window.addEventListener("resize",()=>{
-    const nowMobile=window.matchMedia("(max-width:760px)").matches;
-    if(nowMobile===lastMobile) return;
-    lastMobile=nowMobile;
-    canvas.getObjects().forEach(obj=>{ if(obj?.motifSrc && obj.type==="image") applyFixedMotifLayout(obj,obj.motifId||"college"); });
-    canvas.requestRenderAll();
-    if(FEATURES.previewMode==="dual") renderDualPreview();
-  },{passive:true});
-})();
 
 // v29.1.5: Mobile Vorschau exakt wie Admin skalieren.
 // Die interne Geometrie bleibt immer 590px breit mit aspect-ratio .86;
