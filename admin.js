@@ -945,17 +945,19 @@ function bindPositionEditor(){
     ev.preventDefault();
   };
   positionMotif.addEventListener("dragstart", ev => ev.preventDefault());
-  positionMotif.addEventListener("pointerdown", ev => {
+  const dragStartTarget = positionStage;
+  dragStartTarget.addEventListener("pointerdown", ev => {
     dragging = true;
     dragPointerId = ev.pointerId;
-    try { positionMotif.setPointerCapture(ev.pointerId); } catch(_) {}
+    try { dragStartTarget.setPointerCapture(ev.pointerId); } catch(_) {}
+    move(ev);
     ev.preventDefault();
   });
   window.addEventListener("pointermove", move, {passive:false});
   const stopDrag = (ev) => {
     if(!dragging) return;
     dragging = false;
-    try { if(dragPointerId != null) positionMotif.releasePointerCapture(dragPointerId); } catch(_) {}
+    try { if(dragPointerId != null) positionStage.releasePointerCapture(dragPointerId); } catch(_) {}
     dragPointerId = null;
   };
   window.addEventListener("pointerup", stopDrag);
@@ -1529,9 +1531,9 @@ saveShopBtn.addEventListener("click",async()=>{
   const stage=position?.querySelector('#positionStage');
   const readout=position?.querySelector('.position-readout');
   const sizeControl=toolbar?.querySelector('.position-size-control');
-  const productLabel=toolbar?.querySelector('label:has(#positionProduct)');
-  const sideLabel=toolbar?.querySelector('label:has(#positionSide)');
-  const deviceLabel=toolbar?.querySelector('label:has(#positionDevice)');
+  const productLabel=positionProduct?.closest('label') || toolbar?.querySelector('label:has(#positionProduct)');
+  const sideLabel=positionSide?.closest('label') || toolbar?.querySelector('label:has(#positionSide)');
+  const deviceLabel=positionDevice?.closest('label') || toolbar?.querySelector('label:has(#positionDevice)');
 
   const workspace=document.createElement('div');
   workspace.id='v2853Workspace';
