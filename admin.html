@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
   <title>Shirtprojekt – Zentrale</title>
-  <link rel="stylesheet" href="admin.css?v=29.8.2">
+  <link rel="stylesheet" href="admin.css?v=29.8.3">
 
 <style id="v2849-critical">
 /* v29.1.4 clean fallback: Grunddaten garantiert zusammengefasst */
@@ -1819,18 +1819,161 @@
 </style>
 
 
-
-
-
-<style id="v2982-color-layout-fix">
-#f140ColorPicker.v2919-f140-grid,#poliFlexTurboPicker.v2919-f140-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%!important;min-width:0!important}
-#f140ColorPicker .v2919-f140-option,#poliFlexTurboPicker .v2919-f140-option{display:grid!important;grid-template-columns:18px 20px minmax(0,1fr)!important;align-items:center!important;gap:7px!important;width:100%!important;min-width:0!important;min-height:42px!important;padding:8px 9px!important;margin:0!important;border:1px solid #e1e5ea!important;border-radius:9px!important;box-sizing:border-box!important;overflow:hidden!important;background:#fff!important}
-#f140ColorPicker .v2919-f140-option input[type=checkbox],#poliFlexTurboPicker .v2919-f140-option input[type=checkbox]{appearance:auto!important;-webkit-appearance:checkbox!important;width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;min-height:18px!important;max-height:18px!important;margin:0!important;padding:0!important;justify-self:center!important}
-#f140ColorPicker .v2919-swatch,#poliFlexTurboPicker .v2919-swatch{display:block!important;width:20px!important;min-width:20px!important;max-width:20px!important;height:20px!important;min-height:20px!important;max-height:20px!important;border-radius:50%!important;border:1px solid rgba(0,0,0,.16)!important;margin:0!important;box-sizing:border-box!important;background:var(--sw,#ccc)!important}
-#f140ColorPicker .v2919-name,#poliFlexTurboPicker .v2919-name{display:block!important;min-width:0!important;max-width:100%!important;font-size:10px!important;line-height:1.15!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important;color:#222!important}
-#f140ColorPicker .v2919-f140-option:has(input:checked),#poliFlexTurboPicker .v2919-f140-option:has(input:checked){border-color:#e0b900!important;background:#fff9df!important;box-shadow:inset 0 0 0 1px rgba(224,185,0,.18)!important}
-@media(max-width:760px){#f140ColorPicker.v2919-f140-grid,#poliFlexTurboPicker.v2919-f140-grid{grid-template-columns:1fr!important;gap:6px!important}}
+<style id="v2981-color-layout-fix">
+/* v29.8.1 – Desktop-Farbkarten sauber ausrichten */
+@media (min-width:761px){
+  #f140ColorPicker.v2919-f140-grid,
+  #poliFlexTurboPicker.v2919-f140-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:100%!important;
+  }
+  #f140ColorPicker .v2919-f140-option,
+  #poliFlexTurboPicker .v2919-f140-option{
+    display:grid!important;
+    grid-template-columns:18px 18px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:7px!important;
+    min-width:0!important;
+    min-height:40px!important;
+    height:auto!important;
+    padding:7px 8px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  #f140ColorPicker .v2919-f140-option input[type="checkbox"],
+  #poliFlexTurboPicker .v2919-f140-option input[type="checkbox"]{
+    width:18px!important;min-width:18px!important;max-width:18px!important;
+    height:18px!important;min-height:18px!important;margin:0!important;padding:0!important;
+  }
+  #f140ColorPicker .v2919-swatch,
+  #poliFlexTurboPicker .v2919-swatch{
+    width:18px!important;min-width:18px!important;height:18px!important;
+    border-radius:50%!important;margin:0!important;
+  }
+  #f140ColorPicker .v2919-name,
+  #poliFlexTurboPicker .v2919-name{
+    min-width:0!important;
+    font-size:9.5px!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+  }
+}
 </style>
+
+
+<style id="v2983-final-color-layout">
+/* v29.8.3 FINAL – Farbe, Checkbox und Name bleiben garantiert in einer Karte */
+@media (min-width:761px){
+  #f140ColorPicker,
+  #poliFlexTurboPicker{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  #f140ColorPicker > label.v2919-f140-option,
+  #poliFlexTurboPicker > label.v2919-f140-option{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:42px!important;
+    min-height:42px!important;
+    padding:7px 9px!important;
+    gap:7px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+    border:1px solid #e1e5ea!important;
+    border-radius:9px!important;
+    background:#fff!important;
+  }
+  #f140ColorPicker > label.v2919-f140-option > input[type="checkbox"],
+  #poliFlexTurboPicker > label.v2919-f140-option > input[type="checkbox"]{
+    display:block!important;
+    flex:0 0 18px!important;
+    width:18px!important;
+    min-width:18px!important;
+    max-width:18px!important;
+    height:18px!important;
+    min-height:18px!important;
+    max-height:18px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  #f140ColorPicker > label.v2919-f140-option > .v2919-swatch,
+  #poliFlexTurboPicker > label.v2919-f140-option > .v2919-swatch{
+    display:block!important;
+    flex:0 0 18px!important;
+    width:18px!important;
+    min-width:18px!important;
+    max-width:18px!important;
+    height:18px!important;
+    min-height:18px!important;
+    max-height:18px!important;
+    margin:0!important;
+    border-radius:50%!important;
+    border:1px solid rgba(0,0,0,.16)!important;
+    background-color:var(--sw)!important;
+    box-sizing:border-box!important;
+  }
+  #f140ColorPicker > label.v2919-f140-option > .v2919-name,
+  #poliFlexTurboPicker > label.v2919-f140-option > .v2919-name{
+    display:block!important;
+    flex:1 1 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    font-size:10px!important;
+    line-height:1.12!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+    color:#1c2430!important;
+  }
+}
+@media (max-width:760px){
+  #f140ColorPicker,
+  #poliFlexTurboPicker{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:6px!important;
+    width:100%!important;
+  }
+  #f140ColorPicker > label.v2919-f140-option,
+  #poliFlexTurboPicker > label.v2919-f140-option{
+    display:flex!important;
+    align-items:center!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:40px!important;
+    padding:7px 9px!important;
+    gap:8px!important;
+    box-sizing:border-box!important;
+  }
+  #f140ColorPicker .v2919-name,
+  #poliFlexTurboPicker .v2919-name{
+    white-space:normal!important;
+    overflow:visible!important;
+    font-size:10.5px!important;
+  }
+}
+</style>
+
 </head>
 <body>
   <main class="admin-shell">
