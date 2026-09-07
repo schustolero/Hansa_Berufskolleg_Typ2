@@ -890,7 +890,33 @@
 }
 </style>
 
-\n<style id="v2952-order-priority">\n.order-quick{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px}.order-quick strong{font-size:12px}.order-quick span{font-weight:800;color:#5c6470}.customer-details{margin:9px 0 7px;border-top:1px solid #eceef2;border-bottom:1px solid #eceef2}.customer-details>summary{list-style:none;cursor:pointer;padding:8px 0;font-size:11px;font-weight:800;color:#5d6570;display:flex;align-items:center;justify-content:space-between}.customer-details>summary::-webkit-details-marker{display:none}.customer-details>summary:after{content:"+";font-size:16px;line-height:1;color:#8a9098}.customer-details[open]>summary:after{content:"−"}.customer-details .customer-grid{border:0!important;margin:0!important;padding:2px 0 9px!important}\n@media(max-width:720px){\n  #ordersTab .order-card{padding:8px!important}\n  #ordersTab .order-top{gap:5px!important}\n  #ordersTab .order-number{font-size:12px!important}\n  #ordersTab .order-customer{display:inline-flex!important;width:auto!important;max-width:100%!important;padding:3px 6px!important;margin-top:3px!important;font-size:8.5px!important}\n  #ordersTab .order-date{font-size:7.5px!important}\n  #ordersTab .order-quick{margin-top:4px!important;gap:6px!important}\n  #ordersTab .order-quick strong,#ordersTab .order-quick span{font-size:9px!important}\n  #ordersTab .order-actions{margin-top:2px!important;gap:3px!important}\n  #ordersTab .status-select,#ordersTab .order-actions .ghost-btn{height:28px!important;min-height:28px!important;font-size:7.4px!important;padding:3px 4px!important}\n  #ordersTab .customer-details{margin:5px 0!important}\n  #ordersTab .customer-details>summary{padding:6px 1px!important;font-size:8.5px!important}\n  #ordersTab .customer-details>summary:after{font-size:13px!important}\n  #ordersTab .customer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px 7px!important;padding:0 0 7px!important}\n  #ordersTab .customer-grid span{font-size:6.7px!important}\n  #ordersTab .customer-grid strong{font-size:8.5px!important}\n  #ordersTab .items{gap:3px!important}\n  #ordersTab .item-row{padding:5px 6px!important}\n  #ordersTab .item-row strong{font-size:8.5px!important}\n  #ordersTab .item-row span{font-size:7.4px!important;margin-top:1px!important}\n  #ordersTab .order-footer{margin-top:4px!important;padding-top:5px!important;font-size:8.5px!important}\n}\n</style>\n
+
+<style id="v2952-order-priority">
+.order-quick{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px}.order-quick strong{font-size:12px}.order-quick span{font-weight:800;color:#5c6470}.customer-details{margin:9px 0 7px;border-top:1px solid #eceef2;border-bottom:1px solid #eceef2}.customer-details>summary{list-style:none;cursor:pointer;padding:8px 0;font-size:11px;font-weight:800;color:#5d6570;display:flex;align-items:center;justify-content:space-between}.customer-details>summary::-webkit-details-marker{display:none}.customer-details>summary:after{content:"+";font-size:16px;line-height:1;color:#8a9098}.customer-details[open]>summary:after{content:"−"}.customer-details .customer-grid{border:0!important;margin:0!important;padding:2px 0 9px!important}
+@media(max-width:720px){
+  #ordersTab .order-card{padding:8px!important}
+  #ordersTab .order-top{gap:5px!important}
+  #ordersTab .order-number{font-size:12px!important}
+  #ordersTab .order-customer{display:inline-flex!important;width:auto!important;max-width:100%!important;padding:3px 6px!important;margin-top:3px!important;font-size:8.5px!important}
+  #ordersTab .order-date{font-size:7.5px!important}
+  #ordersTab .order-quick{margin-top:4px!important;gap:6px!important}
+  #ordersTab .order-quick strong,#ordersTab .order-quick span{font-size:9px!important}
+  #ordersTab .order-actions{margin-top:2px!important;gap:3px!important}
+  #ordersTab .status-select,#ordersTab .order-actions .ghost-btn{height:28px!important;min-height:28px!important;font-size:7.4px!important;padding:3px 4px!important}
+  #ordersTab .customer-details{margin:5px 0!important}
+  #ordersTab .customer-details>summary{padding:6px 1px!important;font-size:8.5px!important}
+  #ordersTab .customer-details>summary:after{font-size:13px!important}
+  #ordersTab .customer-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px 7px!important;padding:0 0 7px!important}
+  #ordersTab .customer-grid span{font-size:6.7px!important}
+  #ordersTab .customer-grid strong{font-size:8.5px!important}
+  #ordersTab .items{gap:3px!important}
+  #ordersTab .item-row{padding:5px 6px!important}
+  #ordersTab .item-row strong{font-size:8.5px!important}
+  #ordersTab .item-row span{font-size:7.4px!important;margin-top:1px!important}
+  #ordersTab .order-footer{margin-top:4px!important;padding-top:5px!important;font-size:8.5px!important}
+}
+</style>
+
 
 <style id="v2953-filter-status">
 /* Filter und Status klarer */
@@ -1792,6 +1818,53 @@
 }
 </style>
 
+
+<style id="v2981-color-layout-fix">
+/* v29.8.1 – Desktop-Farbkarten sauber ausrichten */
+@media (min-width:761px){
+  #f140ColorPicker.v2919-f140-grid,
+  #poliFlexTurboPicker.v2919-f140-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:100%!important;
+  }
+  #f140ColorPicker .v2919-f140-option,
+  #poliFlexTurboPicker .v2919-f140-option{
+    display:grid!important;
+    grid-template-columns:18px 18px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:7px!important;
+    min-width:0!important;
+    min-height:40px!important;
+    height:auto!important;
+    padding:7px 8px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  #f140ColorPicker .v2919-f140-option input[type="checkbox"],
+  #poliFlexTurboPicker .v2919-f140-option input[type="checkbox"]{
+    width:18px!important;min-width:18px!important;max-width:18px!important;
+    height:18px!important;min-height:18px!important;margin:0!important;padding:0!important;
+  }
+  #f140ColorPicker .v2919-swatch,
+  #poliFlexTurboPicker .v2919-swatch{
+    width:18px!important;min-width:18px!important;height:18px!important;
+    border-radius:50%!important;margin:0!important;
+  }
+  #f140ColorPicker .v2919-name,
+  #poliFlexTurboPicker .v2919-name{
+    min-width:0!important;
+    font-size:9.5px!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+  }
+}
+</style>
+
 </head>
 <body>
   <main class="admin-shell">
@@ -2081,7 +2154,7 @@
   <script src="/__/firebase/8.10.1/firebase-auth.js"></script>
   <script src="/__/firebase/8.10.1/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
-  <script src="/admin.js?v=29.8.0"></script>
+  <script src="/admin.js?v=29.8.1"></script>
 
 <script id="v2849-fallback">
 (function(){
@@ -2279,7 +2352,7 @@
 <script id="v2919-f140-colors">
 (function(){
   var F140_COLORS = [
-    {id:'white', name:'White', hex:'#ffffff'},
+    {id:'weiss', name:'White', hex:'#ffffff'},
     {id:'black', name:'Black', hex:'#111015'},
     {id:'azure-blue', name:'Azure Blue', hex:'#147fae'},
     {id:'bottle-green', name:'Bottle Green', hex:'#174d2c'},
@@ -2452,7 +2525,7 @@
 <script id="v2940-print-colors">
 (function(){
   var COLORS = [
-    {name:'Anthracite',hex:'#474946'},{name:'Apple Green',hex:'#A5D542'},{name:'Aqua Green',hex:'#317176'},{name:'Baby Pink',hex:'#ECA7BC'},{name:'Beige',hex:'#F0E4C1'},{name:'Black',hex:'#000000'},{name:'Bordeaux',hex:'#642C32'},{name:'Bright Blue',hex:'#93ACD1'},{name:'Bright Copper',hex:'#955D42'},{name:'Bright Gold',hex:'#DDBE68'},{name:'Bright Lavender',hex:'#9D86B3'},{name:'Bright Lime',hex:'#B3DB88'},{name:'Bright Pink',hex:'#A03271'},{name:'Bright Red',hex:'#8E3128'},{name:'Bright Silver',hex:'#A6A9AA'},{name:'Bright Violet',hex:'#C7AFCE'},{name:'Bright Yellow',hex:'#F7D35E'},{name:'Bronze',hex:'#C18D45'},{name:'Brown',hex:'#44382B'},{name:'Champagne',hex:'#DDD29A'},{name:'Coffee',hex:'#8F6E5B'},{name:'Coral',hex:'#ED7157'},{name:'Flame Red',hex:'#DC4647'},{name:'Flamingo',hex:'#B36966'},{name:'Frog Green',hex:'#4FAE4F'},{name:'Fuchsia',hex:'#9E2759'},{name:'Glossy Black',hex:'#000000'},{name:'Glossy Red',hex:'#A13126'},{name:'Glossy White',hex:'#FFFFFF'},{name:'Gold Metallic',hex:'#857451'},{name:'Green',hex:'#2D683D'},{name:'Grey',hex:'#85909A'},{name:'Ice Blue',hex:'#91BFDD'},{name:'Lemon Yellow',hex:'#FAF077'},{name:'Light Apricot',hex:'#EDD0B7'},{name:'Light Berry',hex:'#AF6D9E'},{name:'Light Grey',hex:'#CDCDCD'},{name:'Medium Yellow',hex:'#F6C951'},{name:'Mint',hex:'#9FD4BE'},{name:'Navy Blue',hex:'#0B1B2B'},{name:'Neon Berry',hex:'#7C2398'},{name:'Neon Blue',hex:'#459AD8'},{name:'Neon Dark Pink',hex:'#B5257B'},{name:'Neon Green',hex:'#72D34C'},{name:'Neon Orange',hex:'#F3AE5F'},{name:'Neon Pink',hex:'#EB50B1'},{name:'Neon Red',hex:'#EE7A7A'},{name:'Neon Yellow',hex:'#E4E855'},{name:'Olive',hex:'#9AB37F'},{name:'Orange',hex:'#CF743E'},{name:'Pastel Yellow',hex:'#E9D980'},{name:'Peach Fuzz',hex:'#EFB18A'},{name:'Peri',hex:'#7374B4'},{name:'Purple',hex:'#2D1C6F'},{name:'Red',hex:'#B62820'},{name:'Rose Gold',hex:'#B17D6D'},{name:'Royal Blue',hex:'#326C99'},{name:'Sage Green',hex:'#A9B99B'},{name:'Sand Beige',hex:'#D1B894'},{name:'Silver Metallic',hex:'#A6A8AD'},{name:'Sky Blue',hex:'#67B5DA'},{name:'Violet',hex:'#B59AD0'},{name:'Viva Magenta',hex:'#C62F58'},{name:'White',hex:'#FFFFFF'},{name:'Yellow',hex:'#FCB91D'}
+    {name:'Anthracite',hex:'#474946'},{name:'Apple Green',hex:'#A5D542'},{name:'Aqua Green',hex:'#317176'},{name:'Baby Pink',hex:'#ECA7BC'},{name:'Beige',hex:'#F0E4C1'},{name:'Black',hex:'#000000'},{name:'Bordeaux',hex:'#642C32'},{name:'Bright Blue',hex:'#93ACD1'},{name:'Bright Copper',hex:'#955D42'},{name:'Bright Gold',hex:'#DDBE68'},{name:'Bright Lavender',hex:'#9D86B3'},{name:'Bright Lime',hex:'#B3DB88'},{name:'Bright Pink',hex:'#A03271'},{name:'Bright Red',hex:'#8E3128'},{name:'Bright Silver',hex:'#A6A9AA'},{name:'Bright Violet',hex:'#C7AFCE'},{name:'Bright Yellow',hex:'#F7D35E'},{name:'Bronze',hex:'#C18D45'},{name:'Brown',hex:'#44382B'},{name:'Champagne',hex:'#DDD29A'},{name:'Coffee',hex:'#8F6E5B'},{name:'Coral',hex:'#ED7157'},{name:'Flame Red',hex:'#DC4647'},{name:'Flamingo',hex:'#B36966'},{name:'Frog Green',hex:'#4FAE4F'},{name:'Fuchsia',hex:'#9E2759'},{name:'Glossy Black',hex:'#000000'},{name:'Glossy Red',hex:'#A13126'},{name:'Glossy White',hex:'#FFFFFF'},{name:'Gold Metallic',hex:'#857451'},{name:'Green',hex:'#2D683D'},{name:'Grey',hex:'#7E878D'},{name:'Ice Blue',hex:'#A5CAE8'},{name:'Lemon Yellow',hex:'#FAF077'},{name:'Light Apricot',hex:'#EDD0B7'},{name:'Light Berry',hex:'#AF6D9E'},{name:'Light Grey',hex:'#CDCDCD'},{name:'Medium Yellow',hex:'#F6C951'},{name:'Mint',hex:'#9FD4BE'},{name:'Navy Blue',hex:'#0B1B2B'},{name:'Neon Berry',hex:'#7C2398'},{name:'Neon Blue',hex:'#459AD8'},{name:'Neon Dark Pink',hex:'#B5257B'},{name:'Neon Green',hex:'#72D34C'},{name:'Neon Orange',hex:'#F3AE5F'},{name:'Neon Pink',hex:'#EB50B1'},{name:'Neon Red',hex:'#EE7A7A'},{name:'Neon Yellow',hex:'#E4E855'},{name:'Olive',hex:'#9AB37F'},{name:'Orange',hex:'#CF743E'},{name:'Pastel Yellow',hex:'#F6E591'},{name:'Peach Fuzz',hex:'#F5C19E'},{name:'Peri',hex:'#696AA8'},{name:'Purple',hex:'#21135B'},{name:'Red',hex:'#A0312B'},{name:'Rose Gold',hex:'#AC7D6F'},{name:'Royal Blue',hex:'#35608E'},{name:'Sage Green',hex:'#B5C1A7'},{name:'Sand Beige',hex:'#D1BA9A'},{name:'Silver Metallic',hex:'#8D9093'},{name:'Sky Blue',hex:'#85C3E4'},{name:'Violet',hex:'#BCA1D6'},{name:'Viva Magenta',hex:'#AF3F56'},{name:'White',hex:'#FFFFFF'},{name:'Yellow',hex:'#FCB91D'}
   ];
   var DEFAULT='Yellow';
   function byId(id){return document.getElementById(id)}
